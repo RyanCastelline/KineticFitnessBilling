@@ -13,6 +13,8 @@ public class MonthlyBillingStatements {
 		classesTakenMinusMembershipMaxClasses = 0;
 	}
 	
+	//ToDo: determine how to properly call getter methods. Most likely doesn't like that
+	//studentVo is an ArrayList and will need to call on the individual objects' methods.
 	public void doMain() {
 		try {
 			initialize();
@@ -54,6 +56,7 @@ public class MonthlyBillingStatements {
 		else if(promoNumber == REFERRAL){
 			discountPercent = 0.25; //ToDo: use DAO to draw this from the database.
 		}
+		//else {throw "Error: Invalid promotional number : " + promoNumber}
 		return discountPercent;
 	}
 	
