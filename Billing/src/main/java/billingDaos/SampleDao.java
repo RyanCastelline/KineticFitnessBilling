@@ -11,7 +11,7 @@ public class SampleDao {
 		Class.forName("com.mysql.jdbc.Driver");
 		
 		Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/kinetic_fitness?autoReconnect=true&useSSL=false",
-				"root",	"");
+				"root",	"Caste-dude1");
 		//jdbc:mysql://:localhost:3306/kinetic_fitness is the url
 		//?autoReconnect=true&useSSL=false is used to bypass a warning issued while accessing the DB.
 		//"root" is the user and password for the DB.
