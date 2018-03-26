@@ -11,6 +11,4 @@ public interface IClientBillingDao {
 	
 	public ArrayList<StudentBillingVo> getClientVoInformation(ArrayList<StudentBillingVo> voList) throws Exception;
 	
-	public StudentBillingVo clientParser(Connection conn, ResultSet rs, StudentBillingVo vo) throws SQLException;
-
 }

@@ -1,67 +1,62 @@
 package KineticFitness.Billing;
+import java.awt.List;
 import java.util.ArrayList;
+
+import billingDaos.ClientBillingDao;
 import billingVos.StudentBillingVo;
 
 public class MonthlyBillingStatements {
-	public ArrayList<StudentBillingVo> studentVo;
-	public int classesTakenMinusMembershipMaxClasses;
+	final public static double DROPIN_FEE = 15;
+	public static ArrayList<StudentBillingVo> studentVoList;
+	public static ClientBillingDao billingDao;
 	//public File monthlyBillingStatementFile; //Commented out until I learn to properly use
 	//files in code.
 	
-	private void initialize() {
-		studentVo = new ArrayList<StudentBillingVo>();
-		classesTakenMinusMembershipMaxClasses = 0;
+	public static void main(String[] args) {
+		try {
+			doMain();
+		}
+		catch(Exception e) {
+			System.out.println("Error found in main: " + e);
+		}
+
 	}
 	
 	//ToDo: determine how to properly call getter methods. Most likely doesn't like that
 	//studentVo is an ArrayList and will need to call on the individual objects' methods.
-	public void doMain() {
+	private static void doMain() throws Exception {
+		
+		studentVoList = new ArrayList<StudentBillingVo>();
+		billingDao = new ClientBillingDao();
+		
 		try {
-			initialize();
-			if(studentVo.getPromotionalNumber() > 0) {
-				calculatePromo(studentVo.getPromotionalNumber());
+			billingDao.getClientVoInformation(studentVoList);
+			
+			for (StudentBillingVo vos : studentVoList) {
+				vos.setExtraClassFee(calculateDropinFee(vos));
 			}
-			classesTakenMinusMembershipMaxClasses = (studentVo.getClassesTaken() - 
-					studentVo.getMembershipMaxClasses());
-			if(classesTakenMinusMembershipMaxClasses > 0) {
-				calculateDropinFee(classesTakenMinusMembershipMaxClasses,
-						studentVo.getExtraClassFee());
-			}
+
 			do {
-				createBill(studentVo.toString());
-			} while (!studentVo.isEmpty()); //ToDo: Verify if isEmpty is correct way to iterate through list.
-			do {
-				setClassesTakenToZero();
-			} while (!studentVo.isEmpty()); //ToDo: Verify if isEmpty is correct way to iterate through list.
+				createBill(studentVoList.toString());
+			} while (!studentVoList.isEmpty()); //ToDo: Verify if isEmpty is correct way to iterate through list.
 		} catch(Exception e) {
-			System.out.println(e);
+			throw e;
 		}
 		
 		finally {
 			//monthlyBillingStatementFile.close(); //Commented out until I learn to properly
 			//use files in code.
 		}
-		
 	}
 	
-	private double calculatePromo(int promoNumber) { //ToDo: determine exception to throw
-		final int NEW_STUDENT = 1;
-		final int REFERRAL = 2;
-		double discountPercent = 0;
+	private static double calculateDropinFee(StudentBillingVo vo) {
+		double dropinFee = 0;
+		int totalDropin = ((vo.getClassesTaken()) - vo.getMembershipMaxClasses());
 		
-		if (promoNumber == NEW_STUDENT) {
-			discountPercent = 0.25; //ToDo: use DAO to draw this from the database.
+		if(totalDropin > 0) {
+			dropinFee = (totalDropin * DROPIN_FEE);
 		}
-		
-		else if(promoNumber == REFERRAL){
-			discountPercent = 0.25; //ToDo: use DAO to draw this from the database.
-		}
-		//else {throw "Error: Invalid promotional number : " + promoNumber}
-		return discountPercent;
-	}
-	
-	private double calculateDropinFee(int totalDropin, double dropinFee) {
-		return (totalDropin * dropinFee);
+		return dropinFee;
 	}
 	
 	private static void createBill(String voToString) {
@@ -71,14 +66,5 @@ public class MonthlyBillingStatements {
 		 * in the project.
 		 */
 		//monthlyBillingStatementFile.append(voToString);
-	}
-	
-	private static void setClassesTakenToZero() {
-		/**
-		 * Since the bill is run at the end of the month, it can also be used to set the
-		 * monthly counter for total classes taken to zero in the database. This will be
-		 * completed after learning how to properly change information on a database.
-		 */
-	}
-	
+	}	
 }

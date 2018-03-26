@@ -131,6 +131,109 @@ public class StudentBillingVo {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((city == null) ? 0 : city.hashCode());
+		result = prime * result + classesTaken;
+		result = prime * result + clientNumber;
+		long temp;
+		temp = Double.doubleToLongBits(costAfterPromoDiscount);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(extraClassFee);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		temp = Double.doubleToLongBits(membershipBaseFee);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + membershipMaxClasses;
+		result = prime * result + membershipTier;
+		result = prime * result + ((membershipTierName == null) ? 0 : membershipTierName.hashCode());
+		temp = Double.doubleToLongBits(promotionalDiscount);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((promotionalName == null) ? 0 : promotionalName.hashCode());
+		result = prime * result + promotionalNumber;
+		result = prime * result + ((state == null) ? 0 : state.hashCode());
+		result = prime * result + ((street1 == null) ? 0 : street1.hashCode());
+		result = prime * result + ((street2 == null) ? 0 : street2.hashCode());
+		result = prime * result + ((zip == null) ? 0 : zip.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		StudentBillingVo other = (StudentBillingVo) obj;
+		if (city == null) {
+			if (other.city != null)
+				return false;
+		} else if (!city.equals(other.city))
+			return false;
+		if (classesTaken != other.classesTaken)
+			return false;
+		if (clientNumber != other.clientNumber)
+			return false;
+		if (Double.doubleToLongBits(costAfterPromoDiscount) != Double.doubleToLongBits(other.costAfterPromoDiscount))
+			return false;
+		if (Double.doubleToLongBits(extraClassFee) != Double.doubleToLongBits(other.extraClassFee))
+			return false;
+		if (firstName == null) {
+			if (other.firstName != null)
+				return false;
+		} else if (!firstName.equals(other.firstName))
+			return false;
+		if (lastName == null) {
+			if (other.lastName != null)
+				return false;
+		} else if (!lastName.equals(other.lastName))
+			return false;
+		if (Double.doubleToLongBits(membershipBaseFee) != Double.doubleToLongBits(other.membershipBaseFee))
+			return false;
+		if (membershipMaxClasses != other.membershipMaxClasses)
+			return false;
+		if (membershipTier != other.membershipTier)
+			return false;
+		if (membershipTierName == null) {
+			if (other.membershipTierName != null)
+				return false;
+		} else if (!membershipTierName.equals(other.membershipTierName))
+			return false;
+		if (Double.doubleToLongBits(promotionalDiscount) != Double.doubleToLongBits(other.promotionalDiscount))
+			return false;
+		if (promotionalName == null) {
+			if (other.promotionalName != null)
+				return false;
+		} else if (!promotionalName.equals(other.promotionalName))
+			return false;
+		if (promotionalNumber != other.promotionalNumber)
+			return false;
+		if (state == null) {
+			if (other.state != null)
+				return false;
+		} else if (!state.equals(other.state))
+			return false;
+		if (street1 == null) {
+			if (other.street1 != null)
+				return false;
+		} else if (!street1.equals(other.street1))
+			return false;
+		if (street2 == null) {
+			if (other.street2 != null)
+				return false;
+		} else if (!street2.equals(other.street2))
+			return false;
+		if (zip == null) {
+			if (other.zip != null)
+				return false;
+		} else if (!zip.equals(other.zip))
+			return false;
+		return true;
+	}
+	@Override
 	public String toString() { //ToDo: Format toString to look like a bill.
 		return "StudentBillingVo [clientNumber=" + clientNumber + ", lastName=" + lastName + ", firstName=" + firstName
 				+ ", street1=" + street1 + ", street2=" + street2 + ", city=" + city + ", state=" + state + ", zip="

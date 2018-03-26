@@ -21,7 +21,7 @@ public class MockClientBillingDao implements IClientBillingDao {
 		return voList;
 	}
 	
-	public StudentBillingVo clientParser(Connection conn, ResultSet rs, StudentBillingVo vo) throws SQLException {
+	private StudentBillingVo clientParser(Connection conn, ResultSet rs, StudentBillingVo vo) throws SQLException {
 		vo.setClientNumber(0);
 		vo.setLastName("Doe");
 		vo.setFirstName("John");
