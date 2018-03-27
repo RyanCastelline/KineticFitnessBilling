@@ -1,5 +1,7 @@
 package KineticFitness.Billing;
-import java.awt.List;
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import billingDaos.ClientBillingDao;
@@ -9,43 +11,48 @@ public class MonthlyBillingStatements {
 	final public static double DROPIN_FEE = 15;
 	public static ArrayList<StudentBillingVo> studentVoList;
 	public static ClientBillingDao billingDao;
-	//public File monthlyBillingStatementFile; //Commented out until I learn to properly use
-	//files in code.
+	public static File monthlyBillingStatementFile; 
 	
 	public static void main(String[] args) {
 		try {
 			doMain();
 		}
-		catch(Exception e) {
-			System.out.println("Error found in main: " + e);
+		finally {
+			try {
+				if(monthlyBillingStatementFile != null) {
+					monthlyBillingStatementFile.close();
+				}
+			}
+			catch(IOException ioEx) {
+				System.err.println("Error attempting to close file stream.");
+			}
 		}
-
 	}
-	
-	//ToDo: determine how to properly call getter methods. Most likely doesn't like that
-	//studentVo is an ArrayList and will need to call on the individual objects' methods.
-	private static void doMain() throws Exception {
+
+	private static void doMain() {
 		
 		studentVoList = new ArrayList<StudentBillingVo>();
 		billingDao = new ClientBillingDao();
 		
 		try {
 			billingDao.getClientVoInformation(studentVoList);
-			
+
 			for (StudentBillingVo vos : studentVoList) {
 				vos.setExtraClassFee(calculateDropinFee(vos));
 			}
 
 			do {
-				createBill(studentVoList.toString());
-			} while (!studentVoList.isEmpty()); //ToDo: Verify if isEmpty is correct way to iterate through list.
-		} catch(Exception e) {
-			throw e;
+				createBill(studentVoList);
+			} while (!studentVoList.isEmpty()); // ToDo: Verify if isEmpty is correct way to iterate through list.
+		} 
+		catch(SQLException sqlEx) {
+			System.err.println("Exception found in ClientBillingDao: " + sqlEx);
 		}
-		
-		finally {
-			//monthlyBillingStatementFile.close(); //Commented out until I learn to properly
-			//use files in code.
+		catch(ClassNotFoundException cnfEx) {
+			System.err.println("Exception found in ClientBillingDao: " + cnfEx);
+		}
+		catch(IOException ioEx) {
+			System.err.println("Exception found in MonthlyBillingStatements: " + ioEx);
 		}
 	}
 	
@@ -59,12 +66,9 @@ public class MonthlyBillingStatements {
 		return dropinFee;
 	}
 	
-	private static void createBill(String voToString) {
-		/**
-		 * This section will need to append each Vo's toString to the end of the monthly bill
-		 * file. Unsure how to do this and I'll need to research how to properly do so later
-		 * in the project.
-		 */
-		//monthlyBillingStatementFile.append(voToString);
+	private static void createBill(ArrayList<StudentBillingVo> voList) throws IOException{
+		for(StudentBillingVo vos : voList) {
+			monthlyBillingStatementFile.append(vos.toString());
+		}
 	}	
 }

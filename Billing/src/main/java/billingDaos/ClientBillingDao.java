@@ -25,7 +25,7 @@ public class ClientBillingDao implements IClientBillingDao {
 	private final static String PROMOTIONS_TABLE = " PROMOTIONS ";
 	private final static String PROMOTIONS_COLUMNS = " NAME, PERCENT_DISCOUNT ";
 	
-	public ArrayList<StudentBillingVo> getClientVoInformation(ArrayList<StudentBillingVo> voList) throws Exception {
+	public ArrayList<StudentBillingVo> getClientVoInformation(ArrayList<StudentBillingVo> voList) throws SQLException, ClassNotFoundException {
 		Class.forName("com.mysql.jdbc.Driver");
 		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/kinetic_fitness?autoReconnect=true&useSSL=false",
 				"root",	"");
@@ -49,8 +49,10 @@ public class ClientBillingDao implements IClientBillingDao {
 					determinePromotionalDiscount(conn, vos);
 				}
 			}
-			
 			return voList;
+		}
+		catch(SQLException sqlEx) {
+			throw sqlEx;
 		}
 		finally {
 			rs.close();
@@ -91,7 +93,8 @@ public class ClientBillingDao implements IClientBillingDao {
 		return vo;
 	}
 	
-	private StudentBillingVo determineMembership(Connection conn, StudentBillingVo vo) throws SQLException {
+	private StudentBillingVo determineMembership(Connection conn, 
+			StudentBillingVo vo) throws SQLException {
 		int membershipTier = vo.getMembershipTier();
 		
 		ps = conn.prepareStatement("select" + MEMBERSHIP_COLUMNS + "from" + MEMBERSHIP_TABLE + "where "
@@ -105,7 +108,8 @@ public class ClientBillingDao implements IClientBillingDao {
 		return vo;
 	}
 	
-	private StudentBillingVo determinePromotionalDiscount(Connection conn, StudentBillingVo vo) throws SQLException {
+	private StudentBillingVo determinePromotionalDiscount(Connection conn, 
+			StudentBillingVo vo) throws SQLException {
 		int promoTier = vo.getPromotionalNumber();
 		
 		ps = conn.prepareStatement("select" + PROMOTIONS_COLUMNS + "from" + PROMOTIONS_TABLE + "where "
