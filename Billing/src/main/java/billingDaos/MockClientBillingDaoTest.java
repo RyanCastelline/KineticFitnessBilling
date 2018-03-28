@@ -20,7 +20,7 @@ public class MockClientBillingDaoTest {
 		dao = new MockClientBillingDao();
 		ArrayList<StudentBillingVo> voList = new ArrayList<StudentBillingVo>();
 		
-		voList = dao.getClientVoInformation(voList);
+		voList = dao.getClientVoInformation();
 		assertEquals(voList.size(), 3); //Mock adds 3 Vos to the list. Logic in the real code simply adds
 		//and populates Vos.
 	}

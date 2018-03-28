@@ -9,10 +9,11 @@ import billingVos.StudentBillingVo;
 
 public class MockClientBillingDao implements IClientBillingDao {
 	
-	public ArrayList<StudentBillingVo> getClientVoInformation(ArrayList<StudentBillingVo> voList) throws Exception {
+	public ArrayList<StudentBillingVo> getClientVoInformation() throws Exception {
 		StudentBillingVo vo1 = null;
 		StudentBillingVo vo2 = null;
 		StudentBillingVo vo3 = null;
+		ArrayList<StudentBillingVo> voList = new ArrayList<StudentBillingVo>();
 		
 		voList.add(vo1);
 		voList.add(vo2);

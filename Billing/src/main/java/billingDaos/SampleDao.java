@@ -30,8 +30,8 @@ public class SampleDao {
 		System.out.println("The following students have drop-in classes:");
 		while(result.next()) {
 			if(result.getInt(3) > 0) { //If statement only displays students with positive drop-ins.
-				System.out.println("Name: " + result.getString(1) + " " + result.getString(2) + 
-						"; Total drop-in classes: " + result.getInt(3));
+				System.out.println("Name: " + result.getString("client.FIRST_NAME") + " " + result.getString("client.LAST_NAME") + 
+						"; Total drop-in classes: " + result.getInt("DROPIN_CLASSES"));
 			}
 		}
 	}

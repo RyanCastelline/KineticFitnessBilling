@@ -9,6 +9,6 @@ import billingVos.StudentBillingVo;
 
 public interface IClientBillingDao {
 	
-	public ArrayList<StudentBillingVo> getClientVoInformation(ArrayList<StudentBillingVo> voList) throws Exception;
+	public ArrayList<StudentBillingVo> getClientVoInformation() throws Exception;
 	
 }
