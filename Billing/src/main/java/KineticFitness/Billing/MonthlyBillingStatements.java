@@ -1,5 +1,7 @@
 package KineticFitness.Billing;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -8,10 +10,14 @@ import billingDaos.ClientBillingDao;
 import billingVos.StudentBillingVo;
 
 public class MonthlyBillingStatements {
-	final public static double DROPIN_FEE = 15;
-	public static ArrayList<StudentBillingVo> studentVoList;
-	public static ClientBillingDao billingDao;
-	public static File monthlyBillingStatementFile; 
+	final private static double DROPIN_FEE = 15;
+	final private static String PATH = "C:\\Users\\Ryan\\Documents\\ClassProject\\" +
+			"KineticFitness\\Billing\\MonthlyBillingStatement";
+	private static ArrayList<StudentBillingVo> studentVoList;
+	private static ClientBillingDao billingDao;
+	private static File monthlyBillingStatementFile; 
+	private static FileWriter fileWriter;
+	private static BufferedWriter buffWriter;
 	
 	public static void main(String[] args) {
 		try {
@@ -19,9 +25,10 @@ public class MonthlyBillingStatements {
 		}
 		finally {
 			try {
-				if(monthlyBillingStatementFile != null) {
-					monthlyBillingStatementFile.close();
+				if(buffWriter != null) {
+					buffWriter.close();
 				}
+				else { throw new IOException(); }
 			}
 			catch(IOException ioEx) {
 				System.err.println("Error attempting to close file stream.");
@@ -40,10 +47,11 @@ public class MonthlyBillingStatements {
 			for (StudentBillingVo vos : studentVoList) {
 				vos.setExtraClassFee(calculateDropinFee(vos));
 			}
-
+			
+			setUpFilePath();
 			do {
 				createBill(studentVoList);
-			} while (!studentVoList.isEmpty()); // ToDo: Verify if isEmpty is correct way to iterate through list.
+			} while (!studentVoList.isEmpty());
 		} 
 		catch(SQLException sqlEx) {
 			System.err.println("Exception found in ClientBillingDao: " + sqlEx);
@@ -54,6 +62,12 @@ public class MonthlyBillingStatements {
 		catch(IOException ioEx) {
 			System.err.println("Exception found in MonthlyBillingStatements: " + ioEx);
 		}
+	}
+	
+	private static void setUpFilePath() throws IOException {
+		monthlyBillingStatementFile = new File(PATH);
+		fileWriter = new FileWriter(monthlyBillingStatementFile.getAbsoluteFile());
+		buffWriter = new BufferedWriter(fileWriter);
 	}
 	
 	private static double calculateDropinFee(StudentBillingVo vo) {
@@ -68,7 +82,7 @@ public class MonthlyBillingStatements {
 	
 	private static void createBill(ArrayList<StudentBillingVo> voList) throws IOException{
 		for(StudentBillingVo vos : voList) {
-			monthlyBillingStatementFile.append(vos.toString());
+			buffWriter.write(vos.toString());
 		}
 	}	
 }
