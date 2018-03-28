@@ -28,7 +28,7 @@ public class ClientBillingDao implements IClientBillingDao {
 	public ArrayList<StudentBillingVo> getClientVoInformation() throws SQLException, ClassNotFoundException {
 		Class.forName("com.mysql.jdbc.Driver");
 		conn = DriverManager.getConnection(
-				"jdbc:mysql://localhost:3306/kinetic_fitness?autoReconnect=true&useSSL=false", "root", "Caste-dude1");
+				"jdbc:mysql://localhost:3306/kinetic_fitness?autoReconnect=true&useSSL=false", "root", "");
 		statement = conn.prepareStatement("select" + CLIENT_COLUMNS + "from" + CLIENT_TABLE
 				+ "order by CLIENT_NUMBER");
 		ResultSet rs = statement.executeQuery();
