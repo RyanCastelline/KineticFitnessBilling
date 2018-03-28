@@ -61,7 +61,6 @@ public class ClientBillingDao implements IClientBillingDao {
 
 		ArrayList<StudentBillingVo> list = new ArrayList<StudentBillingVo>();
 		
-		rs.beforeFirst();
 		while (rs.next()) {
 			StudentBillingVo vo = new StudentBillingVo();
 			

@@ -44,10 +44,13 @@ public class MonthlyBillingStatements {
 
 		try {
 			studentVoList = billingDao.getClientVoInformation();
-			System.out.println("Size of array list is: " + studentVoList.size());
 
 			for (StudentBillingVo vos : studentVoList) {
 				vos.setExtraClassFee(calculateDropinFee(vos));
+			}
+			
+			for (StudentBillingVo vos : studentVoList) {
+				vos.setTotalBilled(calculateTotalBilled(vos));
 			}
 
 			setUpFilePath();
@@ -83,9 +86,19 @@ public class MonthlyBillingStatements {
 		}
 		return dropinFee;
 	}
+	
+	private static double calculateTotalBilled(StudentBillingVo vo) {
+		double totalBilled = 0;
+		if(vo.getCostAfterPromoDiscount() > 0) {
+			totalBilled = (vo.getCostAfterPromoDiscount() + vo.getExtraClassFee());
+		} else {
+			totalBilled = (vo.getMembershipBaseFee() + vo.getExtraClassFee());
+		}
+		return totalBilled;
+	}
 
-	private static void createBill(StudentBillingVo vos) throws IOException {
+	private static void createBill(StudentBillingVo vo) throws IOException {
 
-		out.write(vos.toString());
+		out.write(vo.toString());
 	}
 }

@@ -20,6 +20,7 @@ public class StudentBillingVo {
 	private double costAfterPromoDiscount;
 	private int classesTaken;
 	private double extraClassFee;
+	private double totalBilled;
 	
 	public int getClientNumber() {
 		return clientNumber;
@@ -130,6 +131,13 @@ public class StudentBillingVo {
 		this.extraClassFee = extraClassFee;
 	}
 
+	public double getTotalBilled() {
+		return totalBilled;
+	}
+	public void setTotalBilled(double totalBilled) {
+		this.totalBilled = totalBilled;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -156,6 +164,8 @@ public class StudentBillingVo {
 		result = prime * result + ((state == null) ? 0 : state.hashCode());
 		result = prime * result + ((street1 == null) ? 0 : street1.hashCode());
 		result = prime * result + ((street2 == null) ? 0 : street2.hashCode());
+		temp = Double.doubleToLongBits(totalBilled);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((zip == null) ? 0 : zip.hashCode());
 		return result;
 	}
@@ -226,6 +236,8 @@ public class StudentBillingVo {
 				return false;
 		} else if (!street2.equals(other.street2))
 			return false;
+		if (Double.doubleToLongBits(totalBilled) != Double.doubleToLongBits(other.totalBilled))
+			return false;
 		if (zip == null) {
 			if (other.zip != null)
 				return false;
@@ -235,13 +247,35 @@ public class StudentBillingVo {
 	}
 	@Override
 	public String toString() { //ToDo: Format toString to look like a bill.
-		return "StudentBillingVo [clientNumber=" + clientNumber + ", lastName=" + lastName + ", firstName=" + firstName
-				+ ", street1=" + street1 + ", street2=" + street2 + ", city=" + city + ", state=" + state + ", zip="
-				+ zip + ", membershipTier=" + membershipTier + ", membershipTierName=" + membershipTierName
-				+ ", membershipBaseFee=" + membershipBaseFee + ", membershipMaxClasses=" + membershipMaxClasses
-				+ ", promotionalNumber=" + promotionalNumber + ", promotionalName=" + promotionalName
-				+ ", promotionalDiscount=" + promotionalDiscount + ", costAfterPromoDiscount=" + costAfterPromoDiscount
-				+ ", classesTaken=" + classesTaken + ", extraClassFee=" + extraClassFee + "]";
+		String toString = "";
+		
+		toString = String.format("%s%d%20s%n", "Client number: ", clientNumber, firstName + " " + lastName);
+		if(street2 != null) {
+			toString += String.format("%s%n%s,%2s %s%n%n", street1 + " " + street2, city, state, zip);
+		} else {
+			toString += String.format("%s%n%s,%2s %s%n%n", street1 + ",", city + ",", state, zip);
+		}
+		toString += String.format("%s%n%s%6.2f%20s%2d%n%n", membershipTierName, "Membership Fee: ",
+				membershipBaseFee, "Max Classes: ", membershipMaxClasses);
+		if(promotionalNumber != 0) {
+			toString += String.format("%s%s%n%s%4.2f%s%n%s%6.2f%n%n", "Promotion: ", promotionalName, 
+				"Discount: ", promotionalDiscount, " off!", "Membership fee after discount: ", 
+				costAfterPromoDiscount);
+		}
+		toString += String.format("%s%2d%n%s%6.2f%n%s%n%n", "Total classes taken: ", classesTaken,
+				"Extra class fee: ", extraClassFee, "Cost is $15.00 per class above max classes in your membership.");
+		if(promotionalNumber != 0) {
+			toString += String.format("%s%n%-20s%6.2f%n%-20s%6.2f%n%-20s%6.2f%n%n", "Summary of bill:",
+					"Fee after discount: ", costAfterPromoDiscount, "Extra class fee: ", extraClassFee,
+					"Total due: ", totalBilled);
+		} else {
+			toString += String.format("%s%n%-20s%6.2f%n%-20s%6.2f%n%-20s%6.2f%n%n", "Summary of bill:",
+					"Membership fee: ", membershipBaseFee, "Extra class fee: ", extraClassFee,
+					"Total due: ", totalBilled);
+		}
+		toString += String.format("%s%n%n", "------------------------------");
+		
+		return toString;
 	}
 
 }
